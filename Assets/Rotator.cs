@@ -39,7 +39,7 @@ public class Rotator : MonoBehaviour {
         //scale and bound the average magnitude.
         for (int i = 0; i < numPartitions; i++)
         {
-            aveMag[i] = (float)0.5 + aveMag[i] * 100;
+            aveMag[i] = (float)0.2 + aveMag[i] * 1000;
             if (aveMag[i] > 100)
             {
                 aveMag[i] = 100;
@@ -53,7 +53,7 @@ public class Rotator : MonoBehaviour {
 		} 
 		for (int i = 0; i < 7; i++) 
 		{
-			int index = i + 1;
+			int index = i + 100;
 			if (gameObject.name == "ball (" + index + ")") {
 				transform.localScale = new Vector3 (aveMag[1], aveMag[1], aveMag[1]);
 			}
