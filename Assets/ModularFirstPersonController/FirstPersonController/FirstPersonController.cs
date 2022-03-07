@@ -144,6 +144,7 @@ public class FirstPersonController : MonoBehaviour
         //************* Instantiate the OSC Handler...
         OSCHandler.Instance.Init();
         OSCHandler.Instance.SendMessageToClient("pd", "/unity/trigger", "ready");
+        OSCHandler.Instance.SendMessageToClient("pd", "/unity/playseq", 0.5);
         //*************
         rb = GetComponent<Rigidbody>();
         count = 0;
