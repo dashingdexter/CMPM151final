@@ -145,6 +145,7 @@ public class FirstPersonController : MonoBehaviour
         OSCHandler.Instance.Init();
         OSCHandler.Instance.SendMessageToClient("pd", "/unity/trigger", "ready");
         OSCHandler.Instance.SendMessageToClient("pd", "/unity/playseq", 0.5);
+        OSCHandler.Instance.SendMessageToClient("pd", "/unity/foot", "ready");
         //*************
         rb = GetComponent<Rigidbody>();
         count = 0;
@@ -358,17 +359,21 @@ public class FirstPersonController : MonoBehaviour
             if(Input.GetKeyDown(crouchKey) && !holdToCrouch)
             {
                 Crouch();
+               
             }
             
             if(Input.GetKeyDown(crouchKey) && holdToCrouch)
             {
                 isCrouched = false;
                 Crouch();
+               
             }
             else if(Input.GetKeyUp(crouchKey) && holdToCrouch)
             {
                 isCrouched = true;
                 Crouch();
+                
+
             }
         }
 
@@ -396,10 +401,12 @@ public class FirstPersonController : MonoBehaviour
             if (targetVelocity.x != 0 || targetVelocity.z != 0 && isGrounded)
             {
                 isWalking = true;
+                OSCHandler.Instance.SendMessageToClient("pd", "/unity/foot", 10);
             }
             else
             {
                 isWalking = false;
+                OSCHandler.Instance.SendMessageToClient("pd", "/unity/foot", 0);
             }
 
             // All movement calculations shile sprint is active
@@ -423,6 +430,7 @@ public class FirstPersonController : MonoBehaviour
                     if (isCrouched)
                     {
                         Crouch();
+                        
                     }
 
                     if (hideBarWhenFull && !unlimitedSprint)
@@ -489,10 +497,12 @@ public class FirstPersonController : MonoBehaviour
         {
             Debug.DrawRay(origin, direction * distance, Color.red);
             isGrounded = true;
+            
         }
         else
         {
             isGrounded = false;
+           
         }
     }
 
@@ -542,6 +552,7 @@ public class FirstPersonController : MonoBehaviour
             if(isSprinting)
             {
                 timer += Time.deltaTime * (bobSpeed + sprintSpeed);
+                OSCHandler.Instance.SendMessageToClient("pd", "/unity/foot", 500);
             }
             // Calculates HeadBob speed during crouched movement
             else if (isCrouched)
