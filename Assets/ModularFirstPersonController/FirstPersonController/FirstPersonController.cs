@@ -136,7 +136,7 @@ public class FirstPersonController : MonoBehaviour
     #endregion
 
     Dictionary<string, ServerLog> servers = new Dictionary<string, ServerLog>();
-
+    
     private void Awake()
     {
         Application.runInBackground = true; //allows unity to update when not in focus
@@ -144,8 +144,11 @@ public class FirstPersonController : MonoBehaviour
         //************* Instantiate the OSC Handler...
         OSCHandler.Instance.Init();
         OSCHandler.Instance.SendMessageToClient("pd", "/unity/trigger", "ready");
-        OSCHandler.Instance.SendMessageToClient("pd", "/unity/playseq", 0.5);
-        OSCHandler.Instance.SendMessageToClient("pd", "/unity/foot", "ready");
+        OSCHandler.Instance.SendMessageToClient("pd", "/unity/playseq", "ready");
+
+        OSCHandler.Instance.SendMessageToClient("pd", "/unity/walkvolume", "ready");
+        OSCHandler.Instance.SendMessageToClient("pd", "/unity/birdvolume", "ready");
+        OSCHandler.Instance.SendMessageToClient("pd", "/unity/birdvolume", 2f);
         //*************
         rb = GetComponent<Rigidbody>();
         count = 0;
@@ -168,6 +171,7 @@ public class FirstPersonController : MonoBehaviour
 
     void Start()
     {
+
         if(lockCursor)
         {
             Cursor.lockState = CursorLockMode.Locked;
@@ -401,12 +405,17 @@ public class FirstPersonController : MonoBehaviour
             if (targetVelocity.x != 0 || targetVelocity.z != 0 && isGrounded)
             {
                 isWalking = true;
-                OSCHandler.Instance.SendMessageToClient("pd", "/unity/foot", 10);
+                //OSCHandler.Instance.SendMessageToClient("pd", "/unity/foot", 10);
+                float walkspeed = 0.15f;
+                OSCHandler.Instance.SendMessageToClient("pd", "/unity/walkvolume", walkspeed);
+                Debug.Log("aaaa");
             }
             else
             {
                 isWalking = false;
-                OSCHandler.Instance.SendMessageToClient("pd", "/unity/foot", 0);
+                //OSCHandler.Instance.SendMessageToClient("pd", "/unity/foot", 0);
+                //OSCHandler.Instance.SendMessageToClient("pd", "/unity/walkvolume", 0f);
+                OSCHandler.Instance.SendMessageToClient("pd", "/unity/walkvolume", 0.0f);
             }
 
             // All movement calculations shile sprint is active
