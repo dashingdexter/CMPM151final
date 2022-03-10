@@ -406,8 +406,8 @@ public class FirstPersonController : MonoBehaviour
             {
                 isWalking = true;
                 //OSCHandler.Instance.SendMessageToClient("pd", "/unity/foot", 10);
-                float walkspeed = 0.15f;
-                OSCHandler.Instance.SendMessageToClient("pd", "/unity/walkvolume", walkspeed);
+                float walkvolme = 0.35f;
+                OSCHandler.Instance.SendMessageToClient("pd", "/unity/walkvolume", walkvolme);
                 Debug.Log("aaaa");
             }
             else
@@ -421,6 +421,8 @@ public class FirstPersonController : MonoBehaviour
             // All movement calculations shile sprint is active
             if (enableSprint && Input.GetKey(sprintKey) && sprintRemaining > 0f && !isSprintCooldown)
             {
+                OSCHandler.Instance.SendMessageToClient("pd", "/unity/walkspeed", 60.0f);
+                OSCHandler.Instance.SendMessageToClient("pd", "/unity/rollvolume", 0.3f);
                 targetVelocity = transform.TransformDirection(targetVelocity) * sprintSpeed;
 
                 // Apply a force that attempts to reach our target velocity
@@ -453,6 +455,8 @@ public class FirstPersonController : MonoBehaviour
             // All movement calculations while walking
             else
             {
+                OSCHandler.Instance.SendMessageToClient("pd", "/unity/walkspeed", 20.0f);
+                OSCHandler.Instance.SendMessageToClient("pd", "/unity/rollvolume", 0.02f);
                 isSprinting = false;
 
                 if (hideBarWhenFull && sprintRemaining == sprintDuration)
